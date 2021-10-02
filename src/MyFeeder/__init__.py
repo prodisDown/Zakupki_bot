@@ -28,18 +28,18 @@ class MyFeeder:
         ):
             url_path = onlyPageURL(my_sub.url)
             url_method = SITES_DICT[url_path]
-            #print('worker:',url_path,url_method)
+            #print('worker:',url_path,url_method, flush=True)
             with my_sub._lock:
                 updated: bool = url_method(my_sub)
                 if updated:
-                    print('worker:',(my_chat_id,my_sub.sub_id),'pushing update')
+                    print('worker:',(my_chat_id,my_sub.sub_id),'pushing update', flush=True)
                     updatePush(self.pipe, my_chat_id, my_sub.sub_id)
             return
 
 
         def _read_pipe_and_update_list(self):
             (chat_id, sub_id, timestamp) = self.pipe.recv()
-            print('read:','update:', chat_id, sub_id, timestamp)
+            print('read:','update:', chat_id, sub_id, timestamp, flush=True)
 
             # Delete chat and/or sub from update_list if its ID is negative
             if (chat_id < 0) and (abs(chat_id) in update_list):
@@ -64,22 +64,22 @@ class MyFeeder:
         def _keep_tasks_busy(self):
             for my_chat_id in update_list:
                 if my_chat_id not in self.chats:
-                    print('busy:',my_chat_id,'chat is already deleted')
+                    print('busy:',my_chat_id,'chat is already deleted', flush=True)
                     continue
                 for my_sub_id in update_list[my_chat_id]:
                     if my_sub_id not in self.chats[my_chat_id].subs:
-                        print('busy:',my_chat_id,my_sub_id,'sub is already deleted')
+                        print('busy:',my_chat_id,my_sub_id,'sub is already deleted', flush=True)
                         continue
                     t = (my_chat_id,my_sub_id,)
                     if t in subWorkers_tasks:
                         if not subWorkers_tasks[t].done:
-                            print('busy:',t,'not ready')
+                            print('busy:',t,'not ready', flush=True)
                             continue
 
                     my_sub = self.chats[my_chat_id].subs[my_sub_id]
                     if not my_sub.isUpdateNeeded():
                         continue
-                    #print('busy:','submit:', my_chat_id, my_sub_id, time.time())
+                    print('busy:','submit:', my_chat_id, my_sub_id, time.time(), flush=True)
                     subWorkers_tasks[t] = subWorkers.submit(
                             _my_sub_worker,
                             self, my_chat_id, my_sub

@@ -47,17 +47,17 @@ def _roseltorg_sm(my_sub: Subscription) -> bool:
     try:
         resp = urllib.request.urlopen(my_url + '?' + my_query)
     except HTTPError as ex:
-        print('meth:','code:',ex.code,' reason:',ex.reason)
+        print('meth:','code:',ex.code,' reason:',ex.reason, flush=True)
         return False
     except URLError as ex:
-        print('meth:',ex.reason)
+        print('meth:',ex.reason, flush=True)
         return False
     except:
         return False
 
     if resp.status != 200:
-        print('meth:','response:',resp.status)
-        print('meth:','Something wrong with connection')
+        print('meth:','response:',resp.status, flush=True)
+        print('meth:','Something wrong with connection', flush=True)
         return False
 
     try:
@@ -88,7 +88,7 @@ def _roseltorg_sm(my_sub: Subscription) -> bool:
         my_sub.putData('Одно или более изменений. Последний лот:\n  ' +\
                 site_url + this_state.top_lotPath
         )
-        print('meth:','Update!',time.time())
+        print('meth:','Update!',time.time(), flush=True)
 
     if prev_state is None:
         _prepareReturnTrue(); return True
