@@ -32,7 +32,7 @@ class MyFeeder:
             with my_sub._lock:
                 updated: bool = url_method(my_sub)
                 if updated:
-                    print('worker:',(my_chat_id,my_sub.sub_id),'pushing update', flush=True)
+                    print('worker:',(my_chat_id,my_sub.sub_id),'pushing update', time.time(), flush=True)
                     updatePush(self.pipe, my_chat_id, my_sub.sub_id)
             return
 
@@ -79,17 +79,17 @@ class MyFeeder:
                     my_sub = self.chats[my_chat_id].subs[my_sub_id]
                     if not my_sub.isUpdateNeeded():
                         continue
-                    print('busy:','submit:', my_chat_id, my_sub_id, time.time(), flush=True)
+                    #print('busy:','submit:', my_chat_id, my_sub_id, time.time(), flush=True)
                     subWorkers_tasks[t] = subWorkers.submit(
                             _my_sub_worker,
                             self, my_chat_id, my_sub
                         )
             return
 
-
+        ## Infinite loop
         while True:
             ## Receive changes in chats
-            while self.pipe.poll(2):      # Infinite loop
+            while self.pipe.poll(5):
                 _read_pipe_and_update_list(self)
 
             ## Iterate through subs and do stuff
