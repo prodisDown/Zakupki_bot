@@ -53,7 +53,7 @@ class Chat:
 
     def __init__(self, chat_id):
         self.chat_id = deepcopy(chat_id); del chat_id
-        self.subs: dict[int, Subscription] = {}
+        self.subs: dict = {} # [int, Subscription]
         self.last_sub_id: int = None
         self.lastReport = 0     # POSIX's epoch
 

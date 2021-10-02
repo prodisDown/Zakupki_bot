@@ -16,10 +16,10 @@ class MyFeeder:
 
     def _main_loop(self):
 
-        update_list: dict[int, set[int]] = {}
+        update_list: dict = {} # [int, set[int]]
 
         subWorkers = ThreadPoolExecutor(max_workers=3)
-        subWorkers_tasks: dict[tuple[int,int], object] = {}
+        subWorkers_tasks: dict = {} # [tuple[int,int], object]
 
 
         def _my_sub_worker(self,
@@ -97,7 +97,7 @@ class MyFeeder:
 
 
     def __init__(self,
-        chats: dict[int, Chat],
+        chats: dict, # [int, Chat]
         pipe: Pipe # duplex
     ):
         self.chats = chats

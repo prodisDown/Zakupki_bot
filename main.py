@@ -13,12 +13,11 @@ bot_config = {
     'token': '',
     'usage_message': 'Это бот уведомлений об изменениях '+\
     'на электронных торговых площадках. '+\
-    'Он проверяет последние обновления на сайте и присылает сообщение об изменениях '+\
+    'Он проверяет последние обновления на сайте и присылает сообщения об изменениях '+\
     'в соответсвии с вашими подписками.\n\n'+\
     ' /create <url> — создать подписку на указанный URL, чтобы получать обновления.\n'+\
-    ' /list — текущий список RSS обновлений, на которые вы подписались.\n'+\
-    ' /delete <id> — отписаться от указанного обновления RSS. ID подписки '+\
-    'можно узнать из команды /list или из уведомления об обновлении.',
+    ' /delete <id> — отписаться от указанного обновления. ID подписки '+\
+    'можно узнать из уведомлений об обновлении.',
 
     'answer_ErrorUrlIsNotPresent': 'Укажите URL, на который хотите подписаться.',
     'answer_ErrorUrlIsNotInList': 'Данный URL не поддерживается ботом.',
@@ -30,7 +29,7 @@ bot_config = {
 }
 
 
-chats: dict[int, Chat] = {}         # keys are telegram chat ID's
+chats: dict = {} # [int, Chat]  # keys are telegram chat ID's
 
 
 if __name__ == '__main__':
@@ -47,3 +46,6 @@ if __name__ == '__main__':
 ## Start bot and feeder
     bot = MyBot(bot_config, chats, pipe_botEnd)
     feeder = MyFeeder(chats, pipe_feederEnd)
+
+    while True:
+        pass

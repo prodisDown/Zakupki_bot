@@ -27,7 +27,7 @@ class MyBot:
 
     def __init__(self,
         config,
-        chats: dict[int, Chat],
+        chats: dict, # [int, Chat]
         pipe: Pipe, # duplex
     ):
         self.config = deepcopy(config); del config
