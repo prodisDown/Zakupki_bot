@@ -1,0 +1,8 @@
+# Ignore everything
+*
+# Except dirs, .gitignore
+!*/
+!.gitignore
+
+# Track sources
+!*.py
