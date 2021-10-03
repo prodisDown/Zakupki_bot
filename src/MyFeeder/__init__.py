@@ -30,7 +30,12 @@ class MyFeeder:
             url_method = SITES_DICT[url_path]
             #print('worker:',url_path,url_method, flush=True)
             with my_sub._lock:
-                updated: bool = url_method(my_sub)
+                print('worker:',(my_chat_id,my_sub.sub_id),'start',time.time(), flush=True)
+                try:
+                    updated: bool = url_method(my_sub)
+                except:
+                    print('worker:',(my_chat_id,my_sub.sub_id),'failed',time.time(), flush=True)
+                    return
                 if updated:
                     print('worker:',(my_chat_id,my_sub.sub_id),'pushing update', time.time(), flush=True)
                     updatePush(self.pipe, my_chat_id, my_sub.sub_id)
@@ -39,7 +44,7 @@ class MyFeeder:
 
         def _read_pipe_and_update_list(self):
             (chat_id, sub_id, timestamp) = self.pipe.recv()
-            print('read:','update:', chat_id, sub_id, timestamp, flush=True)
+            print('read:','update:',(chat_id,sub_id,timestamp), time.time(), flush=True)
 
             # Delete chat and/or sub from update_list if its ID is negative
             if (chat_id < 0) and (abs(chat_id) in update_list):
@@ -89,7 +94,7 @@ class MyFeeder:
         ## Infinite loop
         while True:
             ## Receive changes in chats
-            while self.pipe.poll(5):
+            while self.pipe.poll(2):
                 _read_pipe_and_update_list(self)
 
             ## Iterate through subs and do stuff

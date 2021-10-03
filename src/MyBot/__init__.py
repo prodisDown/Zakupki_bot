@@ -132,6 +132,7 @@ class MyBot:
         def _update_reporter_loop(context):
             while self.pipe.poll(None):     # Infinite loop
                 (chat_id, sub_id, timestamp) = self.pipe.recv()
+                print('bot:','update:',(chat_id,sub_id,timestamp), time.time(), flush=True)
 
                 # Skip negative values of chat_id & sub_id
                 if (chat_id < 0) or (sub_id < 0):
@@ -145,10 +146,12 @@ class MyBot:
                 c_sub = self.chats[chat_id].subs[sub_id]
 
                 if not c_sub._lock.acquire(timeout=30):
+                    print('bot:','update:','lock timeout', time.time(), flush=True)
                     continue
 
                 # Check if message is not outdated
                 if timestamp < c_sub.dataTime:
+                    c_sub._lock.release()
                     continue
                 text_to_send = 'ID ' + str(sub_id) + '\n' +\
                         c_sub.url + '\n\n' + c_sub.data;
