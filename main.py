@@ -47,5 +47,7 @@ if __name__ == '__main__':
     bot = MyBot(bot_config, chats, pipe_botEnd)
     feeder = MyFeeder(chats, pipe_feederEnd)
 
+## Sleep forever
     while True:
-        pass
+        time.sleep(600)
+        print('main:','keep sleeping',time.time(), flush=True)

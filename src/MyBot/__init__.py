@@ -159,7 +159,10 @@ class MyBot:
 
                 c_sub._lock.release()
 
+        print('bot:','run tasks',time.time(), flush=True)
+
         self.updater.job_queue.run_once(_update_reporter_loop, 0)
 
     ### Bot starts to handle chats
+        print('bot:','handling messages from Telegram',time.time(), flush=True)
         self.updater.start_polling()

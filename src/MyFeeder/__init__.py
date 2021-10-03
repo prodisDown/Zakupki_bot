@@ -103,6 +103,7 @@ class MyFeeder:
         self.chats = chats
         self.pipe = pipe
 
+        print('feeder:','start loop',time.time(), flush=True)
         self.loop = Thread(target=self._main_loop, name="feeder_loop")
         self.loop.start()
 
